@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Home should render correctly 1`] = `
+<div class="container">
+  <div class="row justify-center">
+    <div role="dialog" class="v-dialog__container">
+      <!---->
+    </div>
+  </div>
+  <div class="row text-center">
+    <div class="col col-12">
+      <div class="v-image v-responsive my-1 theme--light" style="height: 300px;">
+        <div class="v-responsive__content"></div>
+      </div>
+    </div>
+    <div class="mb-4 col">
+      <h1 class="display-2 font-weight-bold mb-3">Welcome to the AToR Converter !</h1>
+      <p class="subheading font-weight-regular">
+        Simply type in an arabic numeral from 1 to 100 and get it converted to it's roman numeral
+        equivalent.
+      </p>
+    </div>
+    <!---->
+    <div class="mb-5 col col-12">
+      <h2 class="headline font-weight-bold mb-3">Enter your number here ...</h2>
+      <div class="row justify-center">
+        <div class="col-sm-6 col-md-3 col-12">
+          <form novalidate="novalidate" class="v-form d-flex flex-row flex-nowrap align-baseline justify-space-around">
+            <div class="v-input mx-6 py-2 theme--light v-text-field v-text-field--enclosed v-text-field--outlined">
+              <div class="v-input__control">
+                <div class="v-input__slot">
+                  <fieldset aria-hidden="true">
+                    <legend style="width: 0px;"><span>​</span></legend>
+                  </fieldset>
+                  <div class="v-text-field__slot"><label for="input-5" class="v-label theme--light" style="left: 0px; position: absolute;">Arabic numeral</label><input data-test="input" min="1" max="100" step="1" required="required" id="input-5" type="number"></div>
+                </div>
+                <div class="v-text-field__details">
+                  <div class="v-messages theme--light">
+                    <transition-group-stub tag="div" name="message-transition" class="v-messages__wrapper"></transition-group-stub>
+                  </div>
+                </div>
+              </div>
+            </div> <button type="button" class="py-2 v-btn v-btn--is-elevated v-btn--fab v-btn--has-bg v-btn--round theme--dark v-size--default indigo"><span class="v-btn__content">Go !</span></button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
