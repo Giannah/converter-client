@@ -19,46 +19,17 @@
     </v-row>
 
     <v-row class="text-center">
-      <v-col cols="12">
-        <v-img :src="require('../assets/romancharacter.svg')" class="my-1" contain height="300" />
-      </v-col>
+      <deco></deco>
 
-      <v-col class="mb-4">
-        <h1 class="display-2 font-weight-bold mb-3">Welcome to the AToR Converter !</h1>
-
-        <p class="subheading font-weight-regular">
-          Simply type in an arabic numeral from 1 to 100 and get it converted to it's roman numeral
-          equivalent.
-        </p>
-      </v-col>
-
-      <v-col v-if="convertedNumber.length > 0" class="mb-5" cols="12">
-        <v-row justify="center">
-          <v-alert
-            text
-            outlined
-            color="indigo"
-            icon="mdi-progress-check"
-            transition="scale-transition"
-          >
-            <v-row align="center">
-              <v-col class="grow">
-                <div class="title">Here's your answer :</div>
-                <p>{{ convertedNumber }}</p>
-              </v-col>
-              <v-col class="shrink">
-                <v-btn color="indigo" @click="handleClick" icon>
-                  <v-icon>mdi-thumb-up</v-icon>
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-alert>
-        </v-row>
+      <v-col v-if="convertedNumber.length > 0" class="ma-5" cols="12">
+        <converted-alert
+          :convertedNumber="convertedNumber"
+          @isClicked="handleClick"
+        ></converted-alert>
       </v-col>
 
       <v-col class="mb-5" cols="12" v-show="!convertedNumber">
         <h2 class="headline font-weight-bold mb-3">Enter your number here ...</h2>
-
         <v-row justify="center">
           <v-col cols="12" sm="6" md="3">
             <v-form
@@ -84,20 +55,34 @@
           </v-col>
         </v-row>
       </v-col>
+
+      <v-col cols="12">
+        <event-card :conversions="conversions"></event-card>
+      </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
 import getRomanConversionService from '@/services/ConverterService.js'
+import EventCard from '@/components/EventCard.vue'
+import ConvertedAlert from '@/components/ConvertedAlert.vue'
+import Deco from '@/components/Deco.vue'
 import axios from 'axios'
+
+const events = new EventSource('http://localhost:5001/rest/converter/conversions')
 export default {
   name: 'Home',
-
+  components: {
+    ConvertedAlert,
+    Deco,
+    EventCard,
+  },
   data: () => ({
     value: '',
     isLoading: false,
     convertedNumber: '',
+    conversions: [],
     valueRules: [
       (v) => !!v || 'Value is required',
       (v) => (v && /^[1-9][0-9]?$|^100$/gm.test(v)) || 'Value must be between 1 and 100',
@@ -106,7 +91,7 @@ export default {
   methods: {
     submitForm() {
       const apiClient = axios.create({
-        baseURL: 'http://localhost:5000/rest/converter',
+        baseURL: 'http://localhost:5001/rest/converter',
         withCredentials: false,
         headers: {
           Accept: 'application/json',
@@ -128,10 +113,15 @@ export default {
       this.convertedNumber = ''
     },
   },
+  mounted() {
+    events.onmessage = (event) => {
+      const parsedData = JSON.parse(event.data)
+
+      this.conversions = this.conversions.concat(parsedData).reverse()
+    }
+  },
+  beforeDestroy() {
+    events.close()
+  },
 }
 </script>
-<style lang="scss" scoped>
-.loading-dialog {
-  background-color: #303030;
-}
-</style>
