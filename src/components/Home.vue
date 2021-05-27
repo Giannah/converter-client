@@ -33,27 +33,7 @@
       </v-col>
 
       <v-col v-if="convertedNumber.length > 0" class="mb-5" cols="12">
-        <v-row justify="center">
-          <v-alert
-            text
-            outlined
-            color="indigo"
-            icon="mdi-progress-check"
-            transition="scale-transition"
-          >
-            <v-row align="center">
-              <v-col class="grow">
-                <div class="title">Here's your answer :</div>
-                <p>{{ convertedNumber }}</p>
-              </v-col>
-              <v-col class="shrink">
-                <v-btn color="indigo" @click="handleClick" icon>
-                  <v-icon>mdi-thumb-up</v-icon>
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-alert>
-        </v-row>
+        <converted-alert @isClicked="handleClick"></converted-alert>
       </v-col>
 
       <v-col class="mb-5" cols="12" v-show="!convertedNumber">
@@ -90,10 +70,13 @@
 
 <script>
 import getRomanConversionService from '@/services/ConverterService.js'
+import ConvertedAlert from '@/components/ConvertedAlert.vue'
 import axios from 'axios'
 export default {
   name: 'Home',
-
+  components: {
+    ConvertedAlert,
+  },
   data: () => ({
     value: '',
     isLoading: false,
