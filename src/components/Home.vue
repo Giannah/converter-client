@@ -40,10 +40,7 @@
       </v-col>
 
       <v-col v-if="errorMessage.length > 0" class="ma-5" cols="12">
-        <error-alert
-          :convertedNumber="convertedNumber"
-          @isClicked="handleErrorMessage"
-        ></error-alert>
+        <error-alert :errorMessage="errorMessage" @isClicked="handleErrorMessage"></error-alert>
       </v-col>
 
       <v-col class="mb-5" cols="12" v-show="!convertedNumber && !errorMessage">
