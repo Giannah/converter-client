@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-alert text outlined color="red" icon="mdi-progress-check" transition="scale-transition">
+    <v-alert text outlined color="red" icon="mdi-access-point-off" transition="scale-transition">
       <v-row align="center">
         <v-col class="grow">
           <div class="title">Oups...something went wrong !</div>
