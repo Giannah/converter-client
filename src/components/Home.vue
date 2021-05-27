@@ -33,10 +33,17 @@
       </v-col>
 
       <v-col v-if="convertedNumber.length > 0" class="mb-5" cols="12">
-        <converted-alert @isClicked="handleClick"></converted-alert>
+        <converted-alert
+          :convertedNumber="convertedNumber"
+          @isClicked="handleClick"
+        ></converted-alert>
       </v-col>
 
-      <v-col class="mb-5" cols="12" v-show="!convertedNumber">
+      <v-col v-if="errorMessage.length > 0" class="mb-5" cols="12">
+        <error-alert :errorMessage="errorMessage" @isClicked="handleErrorMessage"></error-alert>
+      </v-col>
+
+      <v-col class="mb-5" cols="12" v-show="!convertedNumber && !errorMessage">
         <h2 class="headline font-weight-bold mb-3">Enter your number here ...</h2>
 
         <v-row justify="center">
@@ -71,16 +78,19 @@
 <script>
 import getRomanConversionService from '@/services/ConverterService.js'
 import ConvertedAlert from '@/components/ConvertedAlert.vue'
+import ErrorAlert from '@/components/ErrorAlert.vue'
 import axios from 'axios'
 export default {
   name: 'Home',
   components: {
     ConvertedAlert,
+    ErrorAlert,
   },
   data: () => ({
     value: '',
     isLoading: false,
     convertedNumber: '',
+    errorMessage: '',
     valueRules: [
       (v) => !!v || 'Value is required',
       (v) => (v && /^[1-9][0-9]?$|^100$/gm.test(v)) || 'Value must be between 1 and 100',
@@ -99,16 +109,25 @@ export default {
       const ConverterService = getRomanConversionService(apiClient)
       if (this.$refs.form.validate()) {
         this.isLoading = true
-        ConverterService.getConvertedNumber({ input: this.value }).then((response) => {
-          this.convertedNumber = response.data
-          this.isLoading = false
-        })
+        ConverterService.getConvertedNumber({ input: this.value })
+          .then((response) => {
+            this.convertedNumber = response.data
+            this.isLoading = false
+          })
+          .catch((error) => {
+            this.errorMessage = `${error}`
+            this.isLoading = false
+          })
         this.$refs.form.reset()
       }
     },
 
     handleClick() {
       this.convertedNumber = ''
+    },
+
+    handleErrorMessage() {
+      this.errorMessage = ''
     },
   },
 }
