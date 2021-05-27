@@ -19,7 +19,18 @@
     </v-row>
 
     <v-row class="text-center">
-      <deco></deco>
+      <v-col cols="12">
+        <v-img :src="require('../assets/romancharacter.svg')" class="my-1" contain height="300" />
+      </v-col>
+
+      <v-col class="mb-2">
+        <h1 class="display-2 font-weight-bold mb-3">Welcome to the AToR Converter !</h1>
+
+        <p class="subheading font-weight-regular">
+          Simply type in an arabic numeral from 1 to 100 and get it converted to it's roman numeral
+          equivalent.
+        </p>
+      </v-col>
 
       <v-col v-if="convertedNumber.length > 0" class="ma-5" cols="12">
         <converted-alert
@@ -67,16 +78,14 @@
 import getRomanConversionService from '@/services/ConverterService.js'
 import EventCard from '@/components/EventCard.vue'
 import ConvertedAlert from '@/components/ConvertedAlert.vue'
-import Deco from '@/components/Deco.vue'
 import axios from 'axios'
 
 const events = new EventSource('http://localhost:5001/rest/converter/conversions')
 export default {
   name: 'Home',
   components: {
-    ConvertedAlert,
-    Deco,
     EventCard,
+    ConvertedAlert,
   },
   data: () => ({
     value: '',
