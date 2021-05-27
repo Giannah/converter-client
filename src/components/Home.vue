@@ -39,7 +39,14 @@
         ></converted-alert>
       </v-col>
 
-      <v-col class="mb-5" cols="12" v-show="!convertedNumber">
+      <v-col v-if="errorMessage.length > 0" class="ma-5" cols="12">
+        <error-alert
+          :convertedNumber="convertedNumber"
+          @isClicked="handleErrorMessage"
+        ></error-alert>
+      </v-col>
+
+      <v-col class="mb-5" cols="12" v-show="!convertedNumber && !errorMessage">
         <h2 class="headline font-weight-bold mb-3">Enter your number here ...</h2>
         <v-row justify="center">
           <v-col cols="12" sm="6" md="3">
@@ -78,6 +85,7 @@
 import getRomanConversionService from '@/services/ConverterService.js'
 import EventCard from '@/components/EventCard.vue'
 import ConvertedAlert from '@/components/ConvertedAlert.vue'
+import ErrorAlert from '@/components/ErrorAlert.vue'
 import axios from 'axios'
 
 const events = new EventSource('http://localhost:5001/rest/converter/conversions')
@@ -86,11 +94,13 @@ export default {
   components: {
     EventCard,
     ConvertedAlert,
+    ErrorAlert,
   },
   data: () => ({
     value: '',
     isLoading: false,
     convertedNumber: '',
+    errorMessage: '',
     conversions: [],
     valueRules: [
       (v) => !!v || 'Value is required',
@@ -110,16 +120,25 @@ export default {
       const ConverterService = getRomanConversionService(apiClient)
       if (this.$refs.form.validate()) {
         this.isLoading = true
-        ConverterService.getConvertedNumber({ input: this.value }).then((response) => {
-          this.convertedNumber = response.data
-          this.isLoading = false
-        })
+        ConverterService.getConvertedNumber({ input: this.value })
+          .then((response) => {
+            this.convertedNumber = response.data
+            this.isLoading = false
+          })
+          .catch((error) => {
+            this.errorMessage = `${error}`
+            this.isLoading = false
+          })
         this.$refs.form.reset()
       }
     },
 
     handleClick() {
       this.convertedNumber = ''
+    },
+
+    handleErrorMessage() {
+      this.errorMessage = ''
     },
   },
   mounted() {
