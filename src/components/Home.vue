@@ -76,10 +76,9 @@
 </template>
 
 <script>
-import getRomanConversionService from '@/services/ConverterService.js'
 import ConvertedAlert from '@/components/ConvertedAlert.vue'
 import ErrorAlert from '@/components/ErrorAlert.vue'
-import axios from 'axios'
+
 export default {
   name: 'Home',
   components: {
@@ -98,18 +97,10 @@ export default {
   }),
   methods: {
     submitForm() {
-      const apiClient = axios.create({
-        baseURL: 'http://localhost:5000/rest/converter',
-        withCredentials: false,
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      })
-      const ConverterService = getRomanConversionService(apiClient)
       if (this.$refs.form.validate()) {
         this.isLoading = true
-        ConverterService.getConvertedNumber({ input: this.value })
+        this.$converterService
+          .getConvertedNumber({ input: this.value })
           .then((response) => {
             this.convertedNumber = response.data
             this.isLoading = false
