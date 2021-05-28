@@ -14,7 +14,7 @@ Requests to the API are made through [Axios](https://github.com/axios/axios) and
 
 **_The exercise is a two-part exercise and therefore there is two branches in that repo._**
 
-This branch is the first part and corresponds to the Back-End (converter-server) repo's **main** branch.
+This branch is the first part and corresponds to the Back-End (converter-server) repo **main** branch.
 
 In order to use this project:
 
